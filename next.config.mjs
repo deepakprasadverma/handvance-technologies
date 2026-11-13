@@ -1,9 +1,20 @@
+const isGithubActions = process.env.GITHUB_ACTIONS || false;
+
+let basePath = '';
+
+if (isGithubActions) {
+  const repo = process.env.GITHUB_REPOSITORY ? process.env.GITHUB_REPOSITORY.replace(/.*?\//, '') : '';
+  basePath = repo ? `/${repo}` : '';
+}
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Unoptimized images allow easy deployment to static hosts (GitHub Pages, Netlify, Vercel)
+  output: 'export',
+  basePath: basePath,
   images: {
     unoptimized: true,
   },
+  trailingSlash: true,
 };
 
 export default nextConfig;
