@@ -69,3 +69,54 @@ export interface EstimatorState {
   company: string;
   projectOverview: string;
 }
+
+export interface Testimonial {
+  id: string;
+  name: string;
+  role: string;
+  company: string;
+  industry: string;
+  quote: string;
+  metric: {
+    label: string;
+    value: string;
+  };
+  highlightTech: string;
+}
+
+export interface WorkflowNode {
+  id: string;
+  label: string;
+  type: "input" | "agent" | "storage" | "guardrail" | "output";
+  description: string;
+  latencyMs: number;
+  status: "idle" | "running" | "completed";
+}
+
+export interface WorkflowSimulation {
+  id: string;
+  title: string;
+  tagline: string;
+  domain: string;
+  inputPrompt: string;
+  targetModel: string;
+  nodes: WorkflowNode[];
+  estimatedCostPerRun: string;
+  totalLatency: string;
+  outputPayload: {
+    status: string;
+    actionTaken: string;
+    consensusScore: number;
+    summary: string;
+  };
+}
+
+export interface CommandItem {
+  id: string;
+  title: string;
+  category: "Navigation" | "Capabilities" | "Actions" | "Resources";
+  subtitle?: string;
+  href?: string;
+  action?: () => void;
+  iconName: string;
+}

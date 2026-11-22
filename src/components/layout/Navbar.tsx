@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Menu, X, ArrowRight, Calendar, PhoneCall, Sparkles } from "lucide-react";
+import { Menu, X, ArrowRight, Calendar, PhoneCall, Sparkles, Search, Command } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Logo } from "@/components/ui/Logo";
 import { GlowingButton } from "@/components/ui/GlowingButton";
@@ -9,9 +9,13 @@ import { Modal } from "@/components/ui/Modal";
 
 interface NavbarProps {
   onOpenDiscovery?: () => void;
+  onOpenCommandPalette?: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenDiscovery }) => {
+export const Navbar: React.FC<NavbarProps> = ({ 
+  onOpenDiscovery,
+  onOpenCommandPalette,
+}) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDiscoveryOpen, setIsDiscoveryOpen] = useState(false);
@@ -27,9 +31,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenDiscovery }) => {
 
   const navLinks = [
     { label: "Services", href: "#services" },
+    { label: "Playground", href: "#playground" },
     { label: "Solutions", href: "#solutions" },
     { label: "Process", href: "#process" },
     { label: "Tech Stack", href: "#tech-stack" },
+    { label: "Testimonials", href: "#testimonials" },
     { label: "Estimator", href: "#estimator" },
   ];
 
@@ -58,32 +64,56 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenDiscovery }) => {
             </a>
 
             {/* Desktop Navigation Links */}
-            <nav className="hidden md:flex items-center gap-1 lg:gap-2 bg-[#0E1017]/80 border border-[#1E2230] px-3 py-1.5 rounded-full shadow-inner">
+            <nav className="hidden lg:flex items-center gap-1 bg-[#0E1017]/80 border border-[#1E2230] px-3 py-1.5 rounded-full shadow-inner">
               {navLinks.map((link) => (
                 <a
                   key={link.label}
                   href={link.href}
-                  className="px-3.5 py-1.5 text-xs lg:text-sm font-medium text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-[#1E2230]/60 rounded-full transition-all duration-200"
+                  className="px-3 py-1 text-xs font-medium text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-[#1E2230]/60 rounded-full transition-all duration-200"
                 >
                   {link.label}
                 </a>
               ))}
             </nav>
 
-            {/* Desktop Action Button */}
-            <div className="hidden md:flex items-center gap-3">
+            {/* Desktop Actions */}
+            <div className="hidden md:flex items-center gap-2.5">
+              {/* Command Palette Trigger Button */}
+              {onOpenCommandPalette && (
+                <button
+                  onClick={onOpenCommandPalette}
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#0E1017] border border-[#1E2230] text-xs font-mono-tag text-[#94A3B8] hover:text-[#F8FAFC] hover:border-cyan-500/40 transition-colors shadow-inner"
+                  title="Search capabilities & shortcuts (Ctrl+K / ⌘K)"
+                >
+                  <Search className="w-3.5 h-3.5 text-cyan-400" />
+                  <span className="hidden xl:inline">Search</span>
+                  <kbd className="hidden sm:inline-flex items-center gap-0.5 text-[10px] bg-[#161926] px-1.5 py-0.5 rounded border border-[#1E2230] text-slate-400">
+                    <Command className="w-2.5 h-2.5" />K
+                  </kbd>
+                </button>
+              )}
+
               <GlowingButton
                 variant="primary"
                 size="sm"
                 onClick={handleOpenDiscovery}
                 icon={<ArrowRight className="w-3.5 h-3.5" />}
               >
-                Book a Discovery Call
+                Book Discovery Call
               </GlowingButton>
             </div>
 
             {/* Mobile Hamburger Button */}
-            <div className="md:hidden flex items-center">
+            <div className="flex md:hidden items-center gap-2">
+              {onOpenCommandPalette && (
+                <button
+                  onClick={onOpenCommandPalette}
+                  className="p-2 rounded-lg bg-[#0E1017] border border-[#1E2230] text-cyan-400 hover:border-cyan-500/50"
+                  aria-label="Open Command Search"
+                >
+                  <Search className="w-4 h-4" />
+                </button>
+              )}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="p-2 rounded-lg bg-[#0E1017] border border-[#1E2230] text-[#94A3B8] hover:text-[#F8FAFC] hover:border-cyan-500/50 transition-colors"
@@ -104,20 +134,31 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenDiscovery }) => {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.25 }}
-            className="fixed top-[69px] left-0 right-0 z-30 bg-[#07070B]/95 backdrop-blur-xl border-b border-[#1E2230] px-4 py-6 md:hidden shadow-[0_20px_40px_rgba(0,0,0,0.9)]"
+            className="fixed top-[69px] left-0 right-0 z-30 bg-[#07070B]/95 backdrop-blur-xl border-b border-[#1E2230] px-4 py-6 md:hidden shadow-[0_20px_40px_rgba(0,0,0,0.9)] max-h-[calc(100vh-70px)] overflow-y-auto"
           >
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-2">
               {navLinks.map((link) => (
                 <a
                   key={link.label}
                   href={link.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="px-4 py-3 rounded-lg text-sm font-medium text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-[#0E1017] border border-transparent hover:border-[#1E2230] transition-colors"
+                  className="px-4 py-2.5 rounded-lg text-sm font-medium text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-[#0E1017] border border-transparent hover:border-[#1E2230] transition-colors"
                 >
                   {link.label}
                 </a>
               ))}
-              <div className="pt-3 border-t border-[#1E2230]">
+              <div className="pt-3 border-t border-[#1E2230] space-y-2">
+                {onOpenCommandPalette && (
+                  <button
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      onOpenCommandPalette();
+                    }}
+                    className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-[#0E1017] border border-[#1E2230] text-xs font-mono-tag text-cyan-400"
+                  >
+                    <Search className="w-3.5 h-3.5" /> Open Quick Search (⌘K)
+                  </button>
+                )}
                 <GlowingButton
                   variant="primary"
                   size="md"
