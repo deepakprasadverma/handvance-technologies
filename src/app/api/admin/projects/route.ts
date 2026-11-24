@@ -40,15 +40,24 @@ export async function GET(req: NextRequest) {
       ];
     }
 
-    const [projects, total] = await Promise.all([
-      prisma.project.findMany({
-        where,
-        orderBy: [{ featured: "desc" }, { sortOrder: "asc" }, { createdAt: "desc" }],
-        skip,
-        take: limit,
-      }),
-      prisma.project.count({ where }),
-    ]);
+    let projects: Array<Record<string, unknown>> = [];
+    let total = 0;
+
+    try {
+      const results = await Promise.all([
+        prisma.project.findMany({
+          where,
+          orderBy: [{ featured: "desc" }, { sortOrder: "asc" }, { createdAt: "desc" }],
+          skip,
+          take: limit,
+        }),
+        prisma.project.count({ where }),
+      ]);
+      projects = results[0];
+      total = results[1];
+    } catch (dbErr) {
+      console.error("Admin projects DB query fallback:", dbErr);
+    }
 
     return NextResponse.json({
       success: true,

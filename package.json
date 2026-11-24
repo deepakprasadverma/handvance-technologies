@@ -10,7 +10,9 @@
     "postinstall": "prisma generate",
     "seed:admin": "node scripts/seed-admin.mjs",
     "test:auth": "node scripts/test-auth.mjs",
-    "test:dashboard": "node scripts/test-phase7-dashboard.mjs"
+    "test:dashboard": "node scripts/test-phase7-dashboard.mjs",
+    "test:phase8": "node scripts/test-phase8.mjs",
+    "test:final": "node scripts/test-phase9-final.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^7.0.8",

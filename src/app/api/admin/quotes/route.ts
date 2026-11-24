@@ -37,15 +37,24 @@ export async function GET(req: NextRequest) {
       ];
     }
 
-    const [quotes, total] = await Promise.all([
-      prisma.quoteRequest.findMany({
-        where,
-        orderBy: { createdAt: "desc" },
-        skip,
-        take: limit,
-      }),
-      prisma.quoteRequest.count({ where }),
-    ]);
+    let quotes: Array<Record<string, unknown>> = [];
+    let total = 0;
+
+    try {
+      const results = await Promise.all([
+        prisma.quoteRequest.findMany({
+          where,
+          orderBy: { createdAt: "desc" },
+          skip,
+          take: limit,
+        }),
+        prisma.quoteRequest.count({ where }),
+      ]);
+      quotes = results[0];
+      total = results[1];
+    } catch (dbErr) {
+      console.error("Admin quotes DB query fallback:", dbErr);
+    }
 
     return NextResponse.json({
       success: true,

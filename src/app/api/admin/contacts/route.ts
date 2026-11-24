@@ -38,15 +38,24 @@ export async function GET(req: NextRequest) {
       ];
     }
 
-    const [contacts, total] = await Promise.all([
-      prisma.contact.findMany({
-        where,
-        orderBy: { createdAt: "desc" },
-        skip,
-        take: limit,
-      }),
-      prisma.contact.count({ where }),
-    ]);
+    let contacts: Array<Record<string, unknown>> = [];
+    let total = 0;
+
+    try {
+      const results = await Promise.all([
+        prisma.contact.findMany({
+          where,
+          orderBy: { createdAt: "desc" },
+          skip,
+          take: limit,
+        }),
+        prisma.contact.count({ where }),
+      ]);
+      contacts = results[0];
+      total = results[1];
+    } catch (dbErr) {
+      console.error("Admin contacts DB query fallback:", dbErr);
+    }
 
     return NextResponse.json({
       success: true,

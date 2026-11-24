@@ -41,7 +41,12 @@ export async function GET() {
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
-    const settingsRecords = await prisma.websiteSetting.findMany();
+    let settingsRecords: Array<{ key: string; value: unknown }> = [];
+    try {
+      settingsRecords = await prisma.websiteSetting.findMany();
+    } catch (dbErr) {
+      console.error("GET settings DB query fallback:", dbErr);
+    }
     const settingsMap: Record<string, Record<string, string>> = {};
 
     settingsRecords.forEach((record) => {

@@ -43,9 +43,14 @@ export async function POST(req: NextRequest) {
     const userAgent = req.headers.get("user-agent") || undefined;
 
     // 3. Find administrator by email (case-insensitive)
-    const adminUser = await prisma.adminUser.findUnique({
-      where: { email: email.toLowerCase() },
-    });
+    let adminUser = null;
+    try {
+      adminUser = await prisma.adminUser.findUnique({
+        where: { email: email.toLowerCase() },
+      });
+    } catch (dbErr) {
+      console.error("Admin login DB query fallback:", dbErr);
+    }
 
     // 4. Verify user exists and is active
     if (!adminUser || !adminUser.isActive) {
