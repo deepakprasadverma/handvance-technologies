@@ -1,5 +1,5 @@
 /**
- * Handvance Technologies Brand Constants
+ * Handvance Technologies Brand Constants & Design Tokens
  */
 export const BRAND = {
   name: "Handvance Technologies",
@@ -7,10 +7,10 @@ export const BRAND = {
   legalName: "Handvance Technologies Inc.",
   tagline: "Engineering Scalable Software & Intelligent Systems",
   description:
-    "Handvance Technologies is a premium IT services and software development brand delivering modern cloud platforms, enterprise architectures, and intelligent systems.",
+    "Handvance Technologies is a modern, premium IT services and custom software engineering agency. We partner with ambitious enterprises and fast-growth startups to architect resilient cloud platforms, autonomous AI systems, and high-velocity digital products.",
   contactEmail: "hello@handvancetechnologies.com",
   phone: "+1 (800) 555-0199",
-  address: "San Francisco, CA & Global Distributed Engineering",
+  address: "100 Pine Street, Suite 1250, San Francisco, CA 94111",
   colors: {
     primaryNavy: "#101D36",
     electricCyan: "#13CDEB",
@@ -24,5 +24,22 @@ export const NAV_LINKS = [
   { label: "About", href: "/about" },
   { label: "Services", href: "/services" },
   { label: "Portfolio", href: "/portfolio" },
+  { label: "Team", href: "/team" },
   { label: "Contact", href: "/contact" },
+] as const;
+
+export const FOOTER_SERVICES = [
+  { label: "Custom Software Engineering", href: "/services#custom-software" },
+  { label: "Cloud Architecture & DevOps", href: "/services#cloud-devops" },
+  { label: "AI & Intelligent Automation", href: "/services#ai-automation" },
+  { label: "Mobile App Development", href: "/services#mobile-apps" },
+  { label: "UI/UX Product Engineering", href: "/services#ui-ux" },
+  { label: "Enterprise IT Consulting", href: "/services#it-consulting" },
+] as const;
+
+export const SOCIAL_LINKS = [
+  { name: "LinkedIn", href: "https://linkedin.com", icon: "Linkedin" },
+  { name: "Twitter", href: "https://twitter.com", icon: "Twitter" },
+  { name: "GitHub", href: "https://github.com", icon: "Github" },
+  { name: "YouTube", href: "https://youtube.com", icon: "Youtube" },
 ] as const;

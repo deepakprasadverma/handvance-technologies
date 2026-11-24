@@ -1,144 +1,325 @@
-import React from "react";
-import { ArrowRight, CheckCircle2, Layers, Shield, Cpu, Code2 } from "lucide-react";
+"use client";
+
+import React, { useState } from "react";
+import { 
+  ArrowRight, 
+  Sparkles, 
+  ShieldCheck, 
+  Check, 
+  Copy, 
+  Palette, 
+  Layout, 
+  ChevronRight 
+} from "lucide-react";
 import { AppLayout } from "@/components/layout/AppLayout";
+import { Container } from "@/components/ui/Container";
+import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
-import { BRAND } from "@/utilities/constants";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/Card";
+import { Badge } from "@/components/ui/Badge";
 
 export default function Home() {
-  const setupFeatures = [
+  const [copiedHex, setCopiedHex] = useState<string | null>(null);
+
+  const copyToClipboard = (hex: string) => {
+    navigator.clipboard.writeText(hex);
+    setCopiedHex(hex);
+    setTimeout(() => setCopiedHex(null), 2000);
+  };
+
+  const brandColors = [
     {
-      icon: <Layers className="w-5 h-5 text-cyan-brand" />,
-      title: "App Router & TypeScript",
-      description: "Scalable directory structure with strict TypeScript configurations and modular route segments.",
+      name: "Primary Navy",
+      hex: "#101D36",
+      bgClass: "bg-navy",
+      textClass: "text-white",
+      description: "Dominant brand canvas, typography anchors, and primary headers.",
     },
     {
-      icon: <Code2 className="w-5 h-5 text-navy" />,
-      title: "Tailwind CSS & Brand Tokens",
-      description: "Customized palette featuring Primary Navy (#101D36) and Electric Cyan (#13CDEB) accents.",
+      name: "Electric Cyan",
+      hex: "#13CDEB",
+      bgClass: "bg-cyan-brand",
+      textClass: "text-navy",
+      description: "Primary accent glow, high-priority CTAs, and active highlights.",
     },
     {
-      icon: <Cpu className="w-5 h-5 text-cyan-brand" />,
-      title: "Modular Architecture",
-      description: "Dedicated layers for components, hooks, utilities, types, and service clients.",
+      name: "Pure White",
+      hex: "#FFFFFF",
+      bgClass: "bg-white",
+      textClass: "text-navy",
+      description: "Card surfaces, component containers, and clean negative space.",
     },
     {
-      icon: <Shield className="w-5 h-5 text-navy" />,
-      title: "Responsive Shell & Layout",
-      description: "Production-ready header, navigation drawer, custom 404 handler, and semantic metadata.",
+      name: "Light Grey",
+      hex: "#F5F7FA",
+      bgClass: "bg-lightGrey",
+      textClass: "text-navy",
+      description: "Subtle secondary backgrounds, alternating rows, and section dividers.",
     },
   ];
 
   return (
     <AppLayout>
-      {/* Hero Welcome Section */}
-      <section className="relative overflow-hidden py-20 sm:py-28 bg-gradient-to-b from-white to-lightGrey">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl space-y-6">
-            {/* Status Pill */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-lightGrey border border-lightGrey-border text-xs font-semibold text-navy">
-              <span className="w-2 h-2 rounded-full bg-cyan-brand animate-pulse" />
-              <span>Phase 1: Project Setup Complete</span>
-              <span className="text-slate-400">•</span>
-              <span className="text-cyan-dark">Handvance Technologies</span>
-            </div>
+      {/* 1. Hero Section: Design System Overview */}
+      <section className="relative overflow-hidden py-20 sm:py-28 bg-gradient-to-b from-white via-lightGrey-subtle/30 to-lightGrey border-b border-lightGrey-border">
+        <Container>
+          <div className="max-w-4xl space-y-6">
+            <Badge variant="cyan" size="md" dot>
+              PHASE 2: GLOBAL WEBSITE DESIGN SYSTEM
+            </Badge>
 
-            {/* Main Headline */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-navy tracking-tight leading-[1.15]">
-              Engineering Scalable Software &{" "}
-              <span className="text-cyan-brand underline decoration-cyan-brand/30 decoration-wavy">
-                Intelligent Systems
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-navy tracking-tight leading-[1.14]">
+              Unified Design System for{" "}
+              <span className="text-cyan-brand relative inline-block underline decoration-cyan-brand/30 decoration-wavy">
+                Handvance Technologies
               </span>
             </h1>
 
-            {/* Subtitle */}
-            <p className="text-lg sm:text-xl text-slate-600 leading-relaxed font-normal">
-              Welcome to the official digital foundation for <strong className="text-navy">{BRAND.name}</strong>.
-              We architect resilient cloud platforms, modern enterprise web systems, and intelligent digital products.
+            <p className="text-lg sm:text-xl text-slate-600 leading-relaxed max-w-2xl font-normal">
+              A modern, premium, professional design system built on Next.js App Router, Tailwind CSS,
+              and Framer Motion. Engineered for visual consistency, WCAG accessibility, and scalable UI workflows.
             </p>
 
-            {/* Action Buttons */}
             <div className="flex flex-wrap items-center gap-4 pt-3">
               <Button
                 variant="cyan"
                 size="lg"
-                href="/services"
+                href="#components"
                 icon={<ArrowRight className="w-4 h-4" />}
               >
-                Explore Services
+                Explore Components
               </Button>
               <Button
                 variant="secondary"
                 size="lg"
-                href="/contact"
+                href="/contact?intent=quote"
+                icon={<ChevronRight className="w-4 h-4" />}
               >
-                Contact Engineering
+                Get a Quote
               </Button>
             </div>
+
+            {/* Quick Design Specs */}
+            <div className="pt-6 border-t border-lightGrey-border flex flex-wrap items-center gap-6 text-xs text-slate-500 font-mono">
+              <span className="flex items-center gap-1.5 text-navy font-semibold">
+                <Palette className="w-4 h-4 text-cyan-brand" /> Navy #101D36 & Cyan #13CDEB
+              </span>
+              <span className="flex items-center gap-1.5 text-navy font-semibold">
+                <Layout className="w-4 h-4 text-cyan-brand" /> 100% Mobile & Desktop Responsive
+              </span>
+              <span className="flex items-center gap-1.5 text-navy font-semibold">
+                <Sparkles className="w-4 h-4 text-cyan-brand" /> Framer Motion Micro-Interactions
+              </span>
+            </div>
           </div>
-        </div>
+        </Container>
       </section>
 
-      {/* Phase 1 Setup Architecture Grid */}
-      <section className="py-20 bg-lightGrey border-t border-lightGrey-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-12">
-            <span className="text-xs font-bold uppercase tracking-wider text-cyan-dark">
-              Architecture Overview
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-navy mt-1">
-              Phase 1 Foundation & System Status
-            </h2>
-            <p className="text-sm text-slate-600 mt-2">
-              The project structure has been established following clean architecture principles and enterprise standards.
-            </p>
-          </div>
+      {/* 2. Color Palette Tokens Section */}
+      <section id="colors" className="py-20 bg-white border-b border-lightGrey-border">
+        <Container>
+          <SectionHeading
+            badge="BRAND PALETTE"
+            title="Core Color"
+            highlightText="Tokens"
+            description="Our strict color hierarchy ensures maximum contrast, legibility, and unmistakable brand recognition across all devices."
+            align="left"
+          />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {setupFeatures.map((feature, idx) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {brandColors.map((color) => (
               <div
-                key={idx}
-                className="bg-white rounded-xl p-6 border border-lightGrey-border shadow-card hover:shadow-card-hover transition-all duration-200 flex flex-col justify-between"
+                key={color.name}
+                className="rounded-2xl border border-lightGrey-border bg-white shadow-card overflow-hidden hover:shadow-card-hover transition-all duration-200"
               >
-                <div>
-                  <div className="w-10 h-10 rounded-lg bg-lightGrey flex items-center justify-center mb-4">
-                    {feature.icon}
-                  </div>
-                  <h3 className="text-base font-bold text-navy mb-2">
-                    {feature.title}
-                  </h3>
-                  <p className="text-xs text-slate-600 leading-relaxed">
-                    {feature.description}
-                  </p>
+                <div className={`h-32 w-full ${color.bgClass} flex items-end p-4 border-b border-lightGrey-border/50`}>
+                  <button
+                    onClick={() => copyToClipboard(color.hex)}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-black/20 backdrop-blur-md text-white text-xs font-mono hover:bg-black/40 transition-colors"
+                    title="Click to copy Hex code"
+                  >
+                    {copiedHex === color.hex ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                    <span>{color.hex}</span>
+                  </button>
                 </div>
-                <div className="mt-5 pt-4 border-t border-lightGrey-border flex items-center gap-1.5 text-xs text-emerald-600 font-semibold">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                  <span>Configured & Ready</span>
+                <div className="p-5 space-y-2">
+                  <h3 className="font-bold text-navy text-base">{color.name}</h3>
+                  <p className="text-xs text-slate-600 leading-relaxed">{color.description}</p>
                 </div>
               </div>
             ))}
           </div>
+        </Container>
+      </section>
 
-          {/* Standby Banner for Phase 2 */}
-          <div className="mt-12 p-6 rounded-2xl bg-navy text-white flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-md">
-            <div>
-              <div className="text-xs font-bold uppercase tracking-wider text-cyan-brand">
-                Phase 1 Execution Notice
+      {/* 3. Reusable UI Components Showcase */}
+      <section id="components" className="py-20 bg-lightGrey border-b border-lightGrey-border">
+        <Container>
+          <SectionHeading
+            badge="COMPONENT LIBRARY"
+            title="Reusable UI"
+            highlightText="Primitives"
+            description="Pre-built, modular design system primitives styled strictly for Handvance Technologies."
+            align="center"
+          />
+
+          {/* Component Showcase 1: Buttons */}
+          <div className="space-y-12">
+            <Card variant="default">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle>1. Button Component (`Button.tsx`)</CardTitle>
+                    <CardDescription>
+                      Supports multiple semantic variants, sizes, icon positioning, and Framer Motion micro-interactions.
+                    </CardDescription>
+                  </div>
+                  <Badge variant="cyan" size="sm">Framer Motion Powered</Badge>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div>
+                  <span className="text-xs font-mono font-semibold text-slate-500 uppercase tracking-wider block mb-3">
+                    Button Variants
+                  </span>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <Button variant="cyan" icon={<ArrowRight className="w-4 h-4" />}>
+                      Electric Cyan (Primary CTA)
+                    </Button>
+                    <Button variant="primary" icon={<ArrowRight className="w-4 h-4" />}>
+                      Navy Blue
+                    </Button>
+                    <Button variant="secondary">
+                      Secondary White
+                    </Button>
+                    <Button variant="outline">
+                      Outline
+                    </Button>
+                    <Button variant="ghost">
+                      Ghost Action
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="pt-4 border-t border-lightGrey-border">
+                  <span className="text-xs font-mono font-semibold text-slate-500 uppercase tracking-wider block mb-3">
+                    Button Sizes
+                  </span>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <Button variant="cyan" size="sm">Small (sm)</Button>
+                    <Button variant="cyan" size="md">Medium (md)</Button>
+                    <Button variant="cyan" size="lg">Large (lg)</Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Component Showcase 2: Badges */}
+            <Card variant="default">
+              <CardHeader>
+                <CardTitle>2. Badge Component (`Badge.tsx`)</CardTitle>
+                <CardDescription>
+                  Pill badges for categorization, metadata tags, and live status pulses.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-wrap items-center gap-3">
+                  <Badge variant="cyan" size="md" dot>Electric Cyan Badge</Badge>
+                  <Badge variant="navy" size="md">Navy Badge</Badge>
+                  <Badge variant="neutral" size="md">Neutral Grey</Badge>
+                  <Badge variant="outline" size="md">Outline Variant</Badge>
+                  <Badge variant="success" size="md" dot>Production Ready</Badge>
+                  <Badge variant="cyan" size="xs">Micro Badge (xs)</Badge>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Component Showcase 3: Cards */}
+            <div className="space-y-4">
+              <div>
+                <h3 className="text-xl font-bold text-navy">3. Card Component (`Card.tsx`)</h3>
+                <p className="text-sm text-slate-600">Structured layout cards with elevation, header, content, and footer regions.</p>
               </div>
-              <h3 className="text-lg font-bold mt-1 text-white">
-                Project setup verified with zero compile errors.
-              </h3>
-              <p className="text-xs text-slate-300 mt-1">
-                Awaiting user instructions to proceed to Phase 2 (Content & Page Building).
-              </p>
-            </div>
-            <div className="flex-shrink-0">
-              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-navy-light border border-navy-muted text-xs font-mono text-cyan-light">
-                <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                STATUS: READY_FOR_PHASE_2
-              </span>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <Card variant="default" hoverEffect>
+                  <CardHeader>
+                    <Badge variant="cyan" size="xs" className="w-fit mb-2">Variant: Default</Badge>
+                    <CardTitle>White Surface Card</CardTitle>
+                    <CardDescription>Standard card with 1px border and soft drop shadow.</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-slate-600">Ideal for general content blocks, features, and portfolio summaries.</p>
+                  </CardContent>
+                  <CardFooter className="justify-between">
+                    <span className="text-xs font-mono text-slate-500">Soft Elevation</span>
+                    <ArrowRight className="w-4 h-4 text-cyan-brand" />
+                  </CardFooter>
+                </Card>
+
+                <Card variant="cyanAccent" hoverEffect>
+                  <CardHeader>
+                    <Badge variant="cyan" size="xs" className="w-fit mb-2">Variant: Cyan Accent</Badge>
+                    <CardTitle>Top Gradient Card</CardTitle>
+                    <CardDescription>Card featuring an Electric Cyan to Navy top border beam.</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-slate-600">Highlights featured service plans, special case studies, or calls to action.</p>
+                  </CardContent>
+                  <CardFooter className="justify-between">
+                    <span className="text-xs font-mono text-cyan-dark font-semibold">Priority Surface</span>
+                    <Sparkles className="w-4 h-4 text-cyan-brand" />
+                  </CardFooter>
+                </Card>
+
+                <Card variant="navy" hoverEffect>
+                  <CardHeader>
+                    <Badge variant="navy" size="xs" className="w-fit mb-2 bg-navy-light text-cyan-light border-navy-muted">Variant: Navy</Badge>
+                    <CardTitle className="text-white">Primary Navy Card</CardTitle>
+                    <CardDescription className="text-slate-300">Deep Navy `#101D36` surface for high-contrast emphasis.</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-slate-300">Used for technical callouts, terminal embeds, and enterprise guarantees.</p>
+                  </CardContent>
+                  <CardFooter className="justify-between border-navy-muted/60">
+                    <span className="text-xs font-mono text-cyan-brand">Dark Inverted</span>
+                    <ShieldCheck className="w-4 h-4 text-cyan-brand" />
+                  </CardFooter>
+                </Card>
+              </div>
             </div>
           </div>
-        </div>
+        </Container>
+      </section>
+
+      {/* 4. Responsive Verification & Testing Notice */}
+      <section className="py-16 bg-white">
+        <Container>
+          <div className="rounded-2xl p-8 bg-gradient-to-r from-navy to-navy-light text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="space-y-2">
+              <Badge variant="cyan" size="xs">
+                PHASE 2 IMPLEMENTATION STATUS
+              </Badge>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
+                Global Design System Verified & Ready
+              </h2>
+              <p className="text-sm text-slate-300 max-w-xl">
+                The Navbar, Footer, Mobile Navigation Drawer, Buttons, Cards, Badges, and Section Headings
+                are fully functional and responsive across mobile, tablet, and desktop viewports.
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-4 flex-shrink-0">
+              <Button
+                variant="cyan"
+                size="md"
+                href="/contact?intent=quote"
+                icon={<ArrowRight className="w-4 h-4" />}
+              >
+                Test &quot;Get a Quote&quot;
+              </Button>
+            </div>
+          </div>
+        </Container>
       </section>
     </AppLayout>
   );
