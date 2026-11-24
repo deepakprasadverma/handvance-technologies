@@ -9,8 +9,7 @@ if (isGithubActions) {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
-  basePath: basePath,
+  ...(isGithubActions ? { output: 'export', basePath } : {}),
   images: {
     unoptimized: true,
   },

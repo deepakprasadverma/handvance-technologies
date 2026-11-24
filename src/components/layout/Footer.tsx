@@ -1,8 +1,17 @@
 import React from "react";
 import Link from "next/link";
-import { Mail, Phone, MapPin, Clock, ShieldCheck, ArrowRight } from "lucide-react";
-import { Logo } from "@/components/common/Logo";
+import { 
+  Mail, 
+  Phone, 
+  MapPin, 
+  Clock, 
+  ShieldCheck, 
+  ArrowRight,
+  Sparkles
+} from "lucide-react";
 import { BRAND, NAV_LINKS, FOOTER_SERVICES, SOCIAL_LINKS } from "@/utilities/constants";
+import { Logo } from "@/components/common/Logo";
+import { NewsletterForm } from "@/components/forms/NewsletterForm";
 
 export const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
@@ -12,7 +21,7 @@ export const Footer: React.FC = () => {
       case "LinkedIn":
         return (
           <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+            <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45c-.9 0-1.63.73-1.63 1.63 0 .9.73 1.63 1.63 1.63.9 0 1.63-.73 1.63-1.63 0-.9-.73-1.63-1.63-1.63Z" />
           </svg>
         );
       case "Twitter":
@@ -24,7 +33,7 @@ export const Footer: React.FC = () => {
       case "GitHub":
         return (
           <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+            <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2Z" />
           </svg>
         );
       case "YouTube":
@@ -40,7 +49,27 @@ export const Footer: React.FC = () => {
 
   return (
     <footer className="bg-navy text-white pt-16 sm:pt-20 pb-12 border-t border-navy-muted/40">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        {/* Newsletter Ingestion Strip */}
+        <div className="p-6 sm:p-8 rounded-3xl bg-navy-dark/90 border border-navy-muted/60 flex flex-col lg:flex-row lg:items-center justify-between gap-6 shadow-xl">
+          <div className="space-y-1.5 max-w-xl">
+            <div className="inline-flex items-center gap-2 text-xs font-mono text-cyan-brand font-bold">
+              <Sparkles className="w-3.5 h-3.5 text-cyan-brand" />
+              <span>Engineering Dispatch</span>
+            </div>
+            <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+              Stay Ahead of Cloud &amp; AI Architecture Shifts
+            </h3>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Subscribe to receive our monthly engineering case studies, architecture blueprints, and systems performance reports. No spam, ever.
+            </p>
+          </div>
+
+          <div className="w-full lg:max-w-md">
+            <NewsletterForm />
+          </div>
+        </div>
+
         {/* Main Grid: 5 Columns */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-14 border-b border-navy-muted/30">
           {/* Col 1: Brand & Introduction (4 cols) */}
@@ -52,10 +81,10 @@ export const Footer: React.FC = () => {
 
             <div className="flex items-center gap-2 text-xs text-slate-300 bg-navy-dark/70 border border-navy-muted/60 p-3 rounded-xl max-w-sm">
               <ShieldCheck className="w-4 h-4 text-cyan-brand flex-shrink-0" />
-              <span>Enterprise-Grade Security • SOC2 & ISO 27001 Posture</span>
+              <span>Enterprise-Grade Security • SOC2 &amp; ISO 27001 Posture</span>
             </div>
 
-            {/* Social Media Placeholders */}
+            {/* Social Media */}
             <div className="pt-1">
               <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-3 font-mono">
                 Connect With Us
@@ -116,7 +145,7 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Col 4: Contact Information Placeholders (3 cols) */}
+          {/* Col 4: Contact Information (3 cols) */}
           <div className="lg:col-span-3">
             <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-4 font-mono text-cyan-light">
               Contact Desk
@@ -163,7 +192,7 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Bottom Bar: Copyright & Legal */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+        <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
           <div>
             © {currentYear} {BRAND.legalName}. All rights reserved.
           </div>
@@ -180,7 +209,7 @@ export const Footer: React.FC = () => {
               Security Protocol
             </Link>
             <span className="text-navy-muted">•</span>
-            <span className="text-cyan-brand font-mono font-medium">Phase 2 Design System</span>
+            <span className="text-cyan-brand font-mono font-medium">Enterprise Cloud Ready</span>
           </div>
         </div>
       </div>

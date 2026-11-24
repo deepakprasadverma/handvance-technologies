@@ -7,8 +7,6 @@ import {
   Clock, 
   CheckCircle2, 
   HeartHandshake, 
-  Send, 
-  X, 
   DollarSign, 
   Laptop, 
   GraduationCap 
@@ -19,18 +17,11 @@ import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { CAREERS_DATA } from "@/utilities/websiteData";
 import { JobOpening } from "@/types";
+import { CareerApplicationModal } from "@/components/forms/CareerApplicationModal";
 
 export default function CareersPage() {
   const [selectedDept, setSelectedDept] = useState<string>("All");
   const [selectedJobForModal, setSelectedJobForModal] = useState<JobOpening | null>(null);
-  const [applicationSubmitted, setApplicationSubmitted] = useState(false);
-  const [applicantForm, setApplicantForm] = useState({
-    name: "",
-    email: "",
-    linkedin: "",
-    portfolio: "",
-    notes: ""
-  });
 
   const departments = [
     "All",
@@ -66,11 +57,6 @@ export default function CareersPage() {
       icon: HeartHandshake
     }
   ];
-
-  const handleApplySubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setApplicationSubmitted(true);
-  };
 
   return (
     <div className="space-y-20 pb-20">
@@ -211,10 +197,7 @@ export default function CareersPage() {
                   <Button
                     variant="cyan"
                     size="md"
-                    onClick={() => {
-                      setSelectedJobForModal(job);
-                      setApplicationSubmitted(false);
-                    }}
+                    onClick={() => setSelectedJobForModal(job)}
                     icon={<ArrowRight className="w-4 h-4" />}
                     className="w-full sm:w-auto shadow-md hover:shadow-cyan"
                   >
@@ -227,139 +210,12 @@ export default function CareersPage() {
         </Container>
       </section>
 
-      {/* Application Modal */}
+      {/* Interactive Career Application Modal */}
       {selectedJobForModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-navy/80 backdrop-blur-sm animate-fade-in">
-          <div className="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl border border-lightGrey-border max-h-[90vh] overflow-y-auto space-y-6">
-            <div className="flex items-center justify-between pb-4 border-b border-lightGrey-border">
-              <div>
-                <Badge variant="cyan" size="sm" className="mb-1">Application Desk</Badge>
-                <h3 className="text-xl font-bold text-navy">{selectedJobForModal.title}</h3>
-                <div className="text-xs text-slate-500 font-mono mt-0.5">
-                  {selectedJobForModal.department} • {selectedJobForModal.location}
-                </div>
-              </div>
-              <button
-                onClick={() => setSelectedJobForModal(null)}
-                className="p-2 rounded-xl text-slate-400 hover:text-navy hover:bg-lightGrey transition-colors"
-                aria-label="Close modal"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            {applicationSubmitted ? (
-              <div className="py-8 text-center space-y-4">
-                <div className="w-16 h-16 rounded-full bg-cyan-glow flex items-center justify-center text-cyan-brand mx-auto shadow-cyan">
-                  <CheckCircle2 className="w-8 h-8 text-cyan-brand" />
-                </div>
-                <h4 className="text-2xl font-bold text-navy">Application Received!</h4>
-                <p className="text-sm text-slate-600 max-w-md mx-auto leading-relaxed">
-                  Thank you for applying to join Handvance Technologies. Our engineering recruiting lead will review your background and get back to you within 3-5 business days.
-                </p>
-                <div className="pt-4">
-                  <Button
-                    variant="primary"
-                    size="md"
-                    onClick={() => setSelectedJobForModal(null)}
-                  >
-                    Close Window
-                  </Button>
-                </div>
-              </div>
-            ) : (
-              <form onSubmit={handleApplySubmit} className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-1">
-                    <label className="text-xs font-bold text-navy font-mono">
-                      Full Name <span className="text-cyan-brand">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={applicantForm.name}
-                      onChange={(e) => setApplicantForm({ ...applicantForm, name: e.target.value })}
-                      placeholder="Alex Taylor"
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-lightGrey border border-lightGrey-border text-sm text-navy focus:outline-none focus:ring-2 focus:ring-cyan-brand/40"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <label className="text-xs font-bold text-navy font-mono">
-                      Email Address <span className="text-cyan-brand">*</span>
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      value={applicantForm.email}
-                      onChange={(e) => setApplicantForm({ ...applicantForm, email: e.target.value })}
-                      placeholder="alex@domain.com"
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-lightGrey border border-lightGrey-border text-sm text-navy focus:outline-none focus:ring-2 focus:ring-cyan-brand/40"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-1">
-                    <label className="text-xs font-bold text-navy font-mono">
-                      LinkedIn URL
-                    </label>
-                    <input
-                      type="url"
-                      value={applicantForm.linkedin}
-                      onChange={(e) => setApplicantForm({ ...applicantForm, linkedin: e.target.value })}
-                      placeholder="https://linkedin.com/in/..."
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-lightGrey border border-lightGrey-border text-sm text-navy focus:outline-none focus:ring-2 focus:ring-cyan-brand/40"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <label className="text-xs font-bold text-navy font-mono">
-                      GitHub or Portfolio URL
-                    </label>
-                    <input
-                      type="url"
-                      value={applicantForm.portfolio}
-                      onChange={(e) => setApplicantForm({ ...applicantForm, portfolio: e.target.value })}
-                      placeholder="https://github.com/..."
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-lightGrey border border-lightGrey-border text-sm text-navy focus:outline-none focus:ring-2 focus:ring-cyan-brand/40"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-1">
-                  <label className="text-xs font-bold text-navy font-mono">
-                    Why Handvance? &amp; Notable Technical Achievements
-                  </label>
-                  <textarea
-                    rows={4}
-                    value={applicantForm.notes}
-                    onChange={(e) => setApplicantForm({ ...applicantForm, notes: e.target.value })}
-                    placeholder="Briefly share projects you are proud of, open source work, or complex architectures you have built..."
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-lightGrey border border-lightGrey-border text-sm text-navy focus:outline-none focus:ring-2 focus:ring-cyan-brand/40 resize-none"
-                  />
-                </div>
-
-                <div className="pt-2 flex items-center justify-end gap-3 border-t border-lightGrey-border">
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="md"
-                    onClick={() => setSelectedJobForModal(null)}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    type="submit"
-                    variant="cyan"
-                    size="md"
-                    icon={<Send className="w-4 h-4" />}
-                  >
-                    Submit Application
-                  </Button>
-                </div>
-              </form>
-            )}
-          </div>
-        </div>
+        <CareerApplicationModal
+          job={selectedJobForModal}
+          onClose={() => setSelectedJobForModal(null)}
+        />
       )}
     </div>
   );
