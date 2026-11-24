@@ -5,6 +5,7 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   variant?: "cyan" | "navy" | "neutral" | "outline" | "success";
   size?: "xs" | "sm" | "md";
   dot?: boolean;
+  pulse?: boolean;
 }
 
 export const Badge: React.FC<BadgeProps> = ({
@@ -12,9 +13,12 @@ export const Badge: React.FC<BadgeProps> = ({
   variant = "cyan",
   size = "sm",
   dot = false,
+  pulse = false,
   className,
   ...props
 }) => {
+  const hasDot = dot || pulse;
+
   const sizeClasses = {
     xs: "px-2 py-0.5 text-[10px]",
     sm: "px-2.5 py-1 text-xs",
@@ -47,7 +51,7 @@ export const Badge: React.FC<BadgeProps> = ({
       )}
       {...props}
     >
-      {dot && (
+      {hasDot && (
         <span className="relative flex h-2 w-2">
           <span className={cn("animate-ping absolute inline-flex h-full w-full rounded-full opacity-75", dotClasses[variant])} />
           <span className={cn("relative inline-flex rounded-full h-2 w-2", dotClasses[variant])} />

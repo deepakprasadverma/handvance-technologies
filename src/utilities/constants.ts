@@ -25,16 +25,17 @@ export const NAV_LINKS = [
   { label: "Services", href: "/services" },
   { label: "Portfolio", href: "/portfolio" },
   { label: "Team", href: "/team" },
+  { label: "Careers", href: "/careers" },
   { label: "Contact", href: "/contact" },
 ] as const;
 
 export const FOOTER_SERVICES = [
-  { label: "Custom Software Engineering", href: "/services#custom-software" },
-  { label: "Cloud Architecture & DevOps", href: "/services#cloud-devops" },
-  { label: "AI & Intelligent Automation", href: "/services#ai-automation" },
-  { label: "Mobile App Development", href: "/services#mobile-apps" },
-  { label: "UI/UX Product Engineering", href: "/services#ui-ux" },
-  { label: "Enterprise IT Consulting", href: "/services#it-consulting" },
+  { label: "Website Development", href: "/services#website-development" },
+  { label: "Web Application Engineering", href: "/services#web-application-development" },
+  { label: "Mobile App Development", href: "/services#mobile-app-development" },
+  { label: "Custom Software Engineering", href: "/services#software-development" },
+  { label: "UI/UX Product Engineering", href: "/services#ui-ux-design" },
+  { label: "IT Consulting & Advisory", href: "/services#it-consulting" },
 ] as const;
 
 export const SOCIAL_LINKS = [

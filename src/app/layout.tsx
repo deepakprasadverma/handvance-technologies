@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { BRAND } from "@/utilities/constants";
+import { AppLayout } from "@/components/layout/AppLayout";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -57,7 +58,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`scroll-smooth ${inter.variable}`}>
       <body className="bg-lightGrey text-navy font-sans antialiased selection:bg-cyan-brand/20 selection:text-navy min-h-screen">
-        {children}
+        <AppLayout>{children}</AppLayout>
       </body>
     </html>
   );

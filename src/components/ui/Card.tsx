@@ -8,6 +8,7 @@ export interface CardProps extends Omit<HTMLMotionProps<"div">, "children"> {
   children: React.ReactNode;
   variant?: "default" | "navy" | "lightGrey" | "cyanAccent";
   hoverEffect?: boolean;
+  hover?: boolean;
   className?: string;
 }
 
@@ -15,9 +16,11 @@ export const Card: React.FC<CardProps> = ({
   children,
   variant = "default",
   hoverEffect = false,
+  hover = false,
   className,
   ...props
 }) => {
+  const isHover = hoverEffect || hover;
   const variantClasses = {
     default:
       "bg-white text-navy border border-lightGrey-border shadow-card",
@@ -31,11 +34,11 @@ export const Card: React.FC<CardProps> = ({
 
   return (
     <motion.div
-      whileHover={hoverEffect ? { y: -4, transition: { duration: 0.2 } } : undefined}
+      whileHover={isHover ? { y: -4, transition: { duration: 0.2 } } : undefined}
       className={cn(
         "rounded-2xl p-6 sm:p-8 transition-smooth",
         variantClasses[variant],
-        hoverEffect && "hover:shadow-card-hover",
+        isHover && "hover:shadow-card-hover",
         className
       )}
       {...props}
