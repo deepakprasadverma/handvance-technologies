@@ -13,11 +13,52 @@ import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { PORTFOLIO_PROJECTS } from "@/utilities/websiteData";
+import { PortfolioProject } from "@/types";
+import prisma from "@/lib/prisma";
+
+export const dynamicParams = true;
 
 interface ProjectPageProps {
   params: {
     slug: string;
   };
+}
+
+async function getProjectBySlug(slug: string): Promise<PortfolioProject | undefined> {
+  try {
+    const dbProject = await prisma.project.findUnique({
+      where: { slug },
+    });
+    if (dbProject) {
+      let categoryLabel: PortfolioProject["category"] = "Web & SaaS";
+      if (dbProject.category === "MOBILE_APPS") categoryLabel = "Mobile Apps";
+      if (dbProject.category === "AI_SYSTEMS") categoryLabel = "AI & Systems";
+      if (dbProject.category === "ECOMMERCE") categoryLabel = "E-Commerce";
+      if (dbProject.category === "CUSTOM_SOFTWARE") categoryLabel = "Custom Software";
+
+      return {
+        id: dbProject.id,
+        slug: dbProject.slug,
+        title: dbProject.title,
+        clientIndustry: dbProject.clientIndustry,
+        category: categoryLabel,
+        tagline: dbProject.tagline,
+        summary: dbProject.summary,
+        challenge: dbProject.challenge,
+        solution: dbProject.solution,
+        keyFeatures: dbProject.keyFeatures,
+        results: dbProject.results,
+        metrics: (Array.isArray(dbProject.metrics) ? dbProject.metrics : []) as PortfolioProject["metrics"],
+        technologies: dbProject.technologies,
+        featured: dbProject.featured,
+        liveDemoUrl: dbProject.liveDemoUrl || undefined,
+        githubUrl: dbProject.githubUrl || undefined,
+      };
+    }
+  } catch (err) {
+    console.error("DB getProjectBySlug error:", err);
+  }
+  return PORTFOLIO_PROJECTS.find((p) => p.slug === slug);
 }
 
 export async function generateStaticParams() {
@@ -27,7 +68,7 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
-  const project = PORTFOLIO_PROJECTS.find((p) => p.slug === params.slug);
+  const project = await getProjectBySlug(params.slug);
   if (!project) {
     return {
       title: "Case Study Not Found | Handvance Technologies",
@@ -39,8 +80,8 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   };
 }
 
-export default function ProjectDetailPage({ params }: ProjectPageProps) {
-  const project = PORTFOLIO_PROJECTS.find((p) => p.slug === params.slug);
+export default async function ProjectDetailPage({ params }: ProjectPageProps) {
+  const project = await getProjectBySlug(params.slug);
 
   if (!project) {
     notFound();

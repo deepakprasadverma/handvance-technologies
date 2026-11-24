@@ -11,9 +11,26 @@ import { Button } from "@/components/ui/Button";
 import { Card, CardContent, CardFooter } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { PORTFOLIO_PROJECTS } from "@/utilities/websiteData";
+import { PortfolioProject } from "@/types";
 
 export default function PortfolioPage() {
+  const [projects, setProjects] = useState<PortfolioProject[]>(PORTFOLIO_PROJECTS);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
+
+  React.useEffect(() => {
+    let isMounted = true;
+    fetch("/api/portfolio")
+      .then((res) => res.json())
+      .then((data) => {
+        if (isMounted && data.success && Array.isArray(data.projects)) {
+          setProjects(data.projects);
+        }
+      })
+      .catch((err) => console.error("Failed to load portfolio from API:", err));
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const categories = [
     "All",
@@ -25,8 +42,8 @@ export default function PortfolioPage() {
   ];
 
   const filteredProjects = selectedCategory === "All"
-    ? PORTFOLIO_PROJECTS
-    : PORTFOLIO_PROJECTS.filter((p) => p.category === selectedCategory);
+    ? projects
+    : projects.filter((p) => p.category === selectedCategory);
 
   return (
     <div className="space-y-20 pb-20">

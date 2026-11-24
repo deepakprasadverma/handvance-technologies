@@ -45,6 +45,8 @@ export interface PortfolioProject {
   technologies: string[];
   featured: boolean;
   liveDemoUrl?: string;
+  githubUrl?: string;
+  coverImageUrl?: string;
   accentColor?: string;
 }
 
