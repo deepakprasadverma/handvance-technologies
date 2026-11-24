@@ -1,0 +1,345 @@
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ============================================================================
+// ENUMS
+// ============================================================================
+
+enum AdminRole {
+  SUPER_ADMIN
+  ADMIN
+  EDITOR
+  VIEWER
+}
+
+enum ContactStatus {
+  NEW
+  IN_REVIEW
+  CONTACTED
+  CONVERTED
+  ARCHIVED
+}
+
+enum QuoteStatus {
+  PENDING
+  UNDER_REVIEW
+  ESTIMATE_PREPARED
+  PROPOSAL_SENT
+  ACCEPTED
+  DECLINED
+}
+
+enum ProjectCategory {
+  WEB_SAAS
+  MOBILE_APPS
+  AI_SYSTEMS
+  ECOMMERCE
+  CUSTOM_SOFTWARE
+}
+
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum Department {
+  LEADERSHIP
+  ENGINEERING
+  AI_CLOUD
+  PRODUCT_DESIGN
+  DEVOPS_CLOUD
+}
+
+enum EmploymentType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  INTERNSHIP
+}
+
+enum ExperienceLevel {
+  JUNIOR
+  MID_LEVEL
+  SENIOR
+  LEAD_STAFF
+  EXECUTIVE
+}
+
+enum ApplicationStatus {
+  NEW
+  REVIEWING
+  SCREENING
+  TECHNICAL_INTERVIEW
+  OFFER_EXTENDED
+  HIRED
+  REJECTED
+  WITHDRAWN
+}
+
+enum SubscriberStatus {
+  ACTIVE
+  UNSUBSCRIBED
+  BOUNCED
+}
+
+enum SettingCategory {
+  GENERAL
+  BRANDING
+  CONTACT_INFO
+  SEO_METADATA
+  SECURITY
+  INTEGRATIONS
+}
+
+// ============================================================================
+// MODELS
+// ============================================================================
+
+/// AdminUser: Internal staff and administrators managing website content and inquiries
+model AdminUser {
+  id           String        @id @default(uuid())
+  email        String        @unique
+  passwordHash String
+  firstName    String
+  lastName     String
+  role         AdminRole     @default(ADMIN)
+  avatarUrl    String?
+  isActive     Boolean       @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  activityLogs ActivityLog[]
+
+  @@index([email])
+  @@index([role])
+}
+
+/// Contact: Inbound general inquiries and technical consultations from the public contact page
+model Contact {
+  id              String        @id @default(uuid())
+  name            String
+  email           String
+  phone           String?
+  company         String?
+  serviceInterest String?
+  budgetRange     String?
+  message         String        @db.Text
+  status          ContactStatus @default(NEW)
+  internalNotes   String?       @db.Text
+  ipAddress       String?
+  userAgent       String?
+  respondedAt     DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([email])
+  @@index([status])
+  @@index([createdAt])
+}
+
+/// QuoteRequest: High-intent project scoping and quotation submissions
+model QuoteRequest {
+  id               String        @id @default(uuid())
+  contactName      String
+  email            String
+  phone            String?
+  company          String?
+  projectType      String
+  estimatedBudget  String?
+  targetTimeline   String?
+  projectDetails   String        @db.Text
+  attachmentUrls   String[]      @default([])
+  status           QuoteStatus   @default(PENDING)
+  estimatedAmount  Decimal?      @db.Decimal(12, 2)
+  assignedArchitect String?
+  internalNotes    String?       @db.Text
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  @@index([email])
+  @@index([status])
+  @@index([createdAt])
+}
+
+/// Project: Flagship case studies and deliverables showcased in the portfolio
+model Project {
+  id             String          @id @default(uuid())
+  slug           String          @unique
+  title          String
+  clientIndustry String
+  category       ProjectCategory
+  tagline        String
+  summary        String          @db.Text
+  challenge      String          @db.Text
+  solution       String          @db.Text
+  keyFeatures    String[]        @default([])
+  results        String[]        @default([])
+  metrics        Json            @default("[]")
+  technologies   String[]        @default([])
+  featured       Boolean         @default(false)
+  liveDemoUrl    String?
+  githubUrl      String?
+  coverImageUrl  String?
+  galleryUrls    String[]        @default([])
+  sortOrder      Int             @default(0)
+  status         ContentStatus   @default(PUBLISHED)
+  publishedAt    DateTime?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  @@index([slug])
+  @@index([category])
+  @@index([featured])
+  @@index([status])
+}
+
+/// TeamMember: Leadership, principal architects, and senior engineering staff
+model TeamMember {
+  id          String        @id @default(uuid())
+  name        String
+  role        String
+  department  Department
+  bio         String        @db.Text
+  avatarUrl   String?
+  skills      String[]      @default([])
+  linkedinUrl String?
+  githubUrl   String?
+  twitterUrl  String?
+  sortOrder   Int           @default(0)
+  isActive    Boolean       @default(true)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([department])
+  @@index([isActive])
+  @@index([sortOrder])
+}
+
+/// Career: Open engineering and product job positions
+model Career {
+  id               String            @id @default(uuid())
+  slug             String            @unique
+  title            String
+  department       Department
+  location         String
+  type             EmploymentType    @default(FULL_TIME)
+  experience       ExperienceLevel   @default(SENIOR)
+  summary          String            @db.Text
+  responsibilities String[]          @default([])
+  requirements     String[]          @default([])
+  benefits         String[]          @default([])
+  isActive         Boolean           @default(true)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  applications     JobApplication[]
+
+  @@index([slug])
+  @@index([department])
+  @@index([isActive])
+}
+
+/// JobApplication: Candidate submissions for open career listings
+model JobApplication {
+  id            String            @id @default(uuid())
+  careerId      String
+  applicantName String
+  email         String
+  phone         String?
+  linkedinUrl   String?
+  portfolioUrl  String?
+  resumeUrl     String            // Supabase Storage file URL
+  coverNotes    String?           @db.Text
+  status        ApplicationStatus @default(NEW)
+  internalNotes String?           @db.Text
+  reviewedBy    String?
+  reviewedAt    DateTime?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  career        Career            @relation(fields: [careerId], references: [id], onDelete: Cascade)
+
+  @@index([careerId])
+  @@index([email])
+  @@index([status])
+  @@index([createdAt])
+}
+
+/// Testimonial: Verified client endorsements and testimonials
+model Testimonial {
+  id           String        @id @default(uuid())
+  author       String
+  role         String
+  company      String
+  quote        String        @db.Text
+  avatarUrl    String?
+  projectScope String
+  rating       Int           @default(5)
+  featured     Boolean       @default(true)
+  sortOrder    Int           @default(0)
+  status       ContentStatus @default(PUBLISHED)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([featured])
+  @@index([status])
+}
+
+/// NewsletterSubscriber: Email list subscriptions from website CTAs
+model NewsletterSubscriber {
+  id             String           @id @default(uuid())
+  email          String           @unique
+  source         String?          @default("website_footer")
+  status         SubscriberStatus @default(ACTIVE)
+  confirmedAt    DateTime?
+  unsubscribedAt DateTime?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  @@index([email])
+  @@index([status])
+}
+
+/// WebsiteSetting: Global key-value system settings and metadata
+model WebsiteSetting {
+  id          String          @id @default(uuid())
+  key         String          @unique
+  value       Json
+  description String?
+  category    SettingCategory @default(GENERAL)
+  isPublic    Boolean         @default(false)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@index([key])
+  @@index([category])
+  @@index([isPublic])
+}
+
+/// ActivityLog: Audit log tracking administrative actions and system events
+model ActivityLog {
+  id          String     @id @default(uuid())
+  adminUserId String?
+  action      String
+  entityType  String
+  entityId    String?
+  metadata    Json?
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime   @default(now())
+
+  adminUser   AdminUser? @relation(fields: [adminUserId], references: [id], onDelete: SetNull)
+
+  @@index([adminUserId])
+  @@index([entityType, entityId])
+  @@index([createdAt])
+}
