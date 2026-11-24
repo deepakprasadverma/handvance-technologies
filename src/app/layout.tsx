@@ -1,43 +1,50 @@
 import type { Metadata, Viewport } from "next";
-import localFont from "next/font/local";
+import { Inter } from "next/font/google";
 import "./globals.css";
+import { BRAND } from "@/utilities/constants";
 
-const sansFont = localFont({
-  src: "./fonts/GeistVF.woff",
+const inter = Inter({
+  subsets: ["latin"],
   variable: "--font-inter",
   display: "swap",
-  weight: "100 900",
-});
-
-const monoFont = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-jetbrains",
-  display: "swap",
-  weight: "100 900",
+  weight: ["300", "400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
-  title: "Handvance Technologies | Custom Software & AI Development Agency",
-  description:
-    "Engineering scalable software, distributed cloud systems, and autonomous AI pipelines for forward-thinking enterprises and fast-growing startups.",
+  title: {
+    default: `${BRAND.name} | IT Services & Software Development`,
+    template: `%s | ${BRAND.name}`,
+  },
+  description: BRAND.description,
   keywords: [
-    "AI Development Agency",
-    "Custom Software Engineering",
-    "Autonomous AI Agents",
-    "Distributed Cloud Architecture",
-    "Next.js Development",
-    "Mobile Apps",
-    "SaaS Platforms",
+    "IT Services",
+    "Custom Software Development",
+    "Cloud Architecture",
+    "Enterprise Solutions",
+    "Handvance Technologies",
+    "Web Application Engineering",
+    "Mobile App Development",
+    "AI Systems",
   ],
-  authors: [{ name: "Handvance Technologies" }],
+  authors: [{ name: BRAND.name }],
+  creator: BRAND.name,
+  publisher: BRAND.name,
+  metadataBase: new URL("https://handvance-technologies.vercel.app"),
+  openGraph: {
+    title: `${BRAND.name} | IT Services & Software Development`,
+    description: BRAND.description,
+    siteName: BRAND.name,
+    locale: "en_US",
+    type: "website",
+  },
   icons: {
     icon: "/favicon.ico",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#07070B",
-  colorScheme: "dark",
+  themeColor: "#101D36",
+  colorScheme: "light",
   width: "device-width",
   initialScale: 1,
 };
@@ -48,10 +55,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark scroll-smooth" style={{ colorScheme: "dark" }}>
-      <body
-        className={`${sansFont.variable} ${monoFont.variable} bg-[#07070B] text-[#94A3B8] font-sans antialiased selection:bg-cyan-500/30 selection:text-cyan-200 min-h-screen`}
-      >
+    <html lang="en" className={`scroll-smooth ${inter.variable}`}>
+      <body className="bg-lightGrey text-navy font-sans antialiased selection:bg-cyan-brand/20 selection:text-navy min-h-screen">
         {children}
       </body>
     </html>

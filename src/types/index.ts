@@ -1,122 +1,33 @@
-export type ServiceCategory = "web" | "ai" | "mobile" | "design" | "cloud";
+/**
+ * Global TypeScript Interfaces for Handvance Technologies
+ */
 
-export interface ServiceItem {
-  id: string;
-  category: ServiceCategory;
-  title: string;
-  subtitle: string;
-  description: string;
-  badge: string;
-  features: string[];
-  metrics: {
-    label: string;
-    value: string;
-  };
-  technologies: string[];
+export interface NavItem {
+  label: string;
+  href: string;
+  external?: boolean;
 }
 
-export type CaseStudyFilter = "all" | "web" | "ai" | "mobile";
-
-export interface CaseStudy {
+export interface ServiceDefinition {
   id: string;
   title: string;
-  clientIndustry: string;
-  category: "web" | "ai" | "mobile";
-  categoryLabel: string;
-  tagline: string;
-  problem: string;
-  solution: string;
-  impactMetrics: {
-    label: string;
-    value: string;
-    sublabel?: string;
-  }[];
-  techStack: string[];
-  mockupAccent: "indigo" | "cyan" | "violet" | "emerald";
-  architectureType: string;
-}
-
-export interface ProcessStep {
-  number: string;
-  title: string;
-  phase: string;
   description: string;
-  deliverables: string[];
-  duration: string;
+  category: "custom-software" | "cloud-systems" | "ai-automation" | "mobile-apps" | "ui-ux";
   icon: string;
 }
 
-export interface TechItem {
-  name: string;
-  level: string;
-  iconName: string;
-  color: string;
+export interface ApiResponse<T = unknown> {
+  success: boolean;
+  data?: T;
+  message?: string;
+  error?: string;
 }
 
-export interface TechCategory {
-  title: string;
-  badge: string;
-  description: string;
-  items: TechItem[];
-}
-
-export interface EstimatorState {
-  services: string[];
-  tier: "mvp" | "growth" | "enterprise";
-  timeline: "accelerated" | "standard" | "flexible";
+export interface ContactInquiry {
   name: string;
   email: string;
-  company: string;
-  projectOverview: string;
-}
-
-export interface Testimonial {
-  id: string;
-  name: string;
-  role: string;
-  company: string;
-  industry: string;
-  quote: string;
-  metric: {
-    label: string;
-    value: string;
-  };
-  highlightTech: string;
-}
-
-export interface WorkflowNode {
-  id: string;
-  label: string;
-  type: "input" | "agent" | "storage" | "guardrail" | "output";
-  description: string;
-  latencyMs: number;
-  status: "idle" | "running" | "completed";
-}
-
-export interface WorkflowSimulation {
-  id: string;
-  title: string;
-  tagline: string;
-  domain: string;
-  inputPrompt: string;
-  targetModel: string;
-  nodes: WorkflowNode[];
-  estimatedCostPerRun: string;
-  totalLatency: string;
-  outputPayload: {
-    status: string;
-    actionTaken: string;
-    consensusScore: number;
-    summary: string;
-  };
-}
-
-export interface CommandItem {
-  id: string;
-  title: string;
-  category: "Navigation" | "Capabilities" | "Actions" | "Resources";
-  subtitle?: string;
-  href?: string;
-  action?: () => void;
-  iconName: string;
+  company?: string;
+  serviceInterest?: string;
+  message: string;
+  createdAt: string;
 }

@@ -1,7 +1,6 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  darkMode: "class",
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -10,70 +9,35 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        obsidian: {
-          DEFAULT: "#07070B",
-          card: "#0E1017",
-          border: "#1E2230",
-          hover: "#141724",
-          light: "#161926",
+        navy: {
+          DEFAULT: "#101D36",
+          dark: "#0A1324",
+          light: "#1B2E54",
+          muted: "#243B6B",
         },
-        brand: {
-          indigo: "#3B82F6",
-          cyan: "#06B6D4",
-          violet: "#6366F1",
-          emerald: "#10B981",
+        cyan: {
+          DEFAULT: "#13CDEB",
+          light: "#48DAF1",
+          dark: "#0EB0CA",
+          glow: "rgba(19, 205, 235, 0.25)",
+        },
+        lightGrey: {
+          DEFAULT: "#F5F7FA",
+          subtle: "#EBF0F7",
+          border: "#E2E8F0",
         },
       },
       fontFamily: {
-        mono: [
-          "var(--font-jetbrains)",
-          "JetBrains Mono",
-          "Fira Code",
-          "ui-monospace",
-          "SFMono-Regular",
-          "Menlo",
-          "Monaco",
-          "Consolas",
-          "monospace",
-        ],
-        sans: [
-          "var(--font-inter)",
-          "Inter",
-          "system-ui",
-          "-apple-system",
-          "BlinkMacSystemFont",
-          "sans-serif",
-        ],
+        sans: ["var(--font-inter)", "Inter", "system-ui", "-apple-system", "sans-serif"],
       },
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "radial-spotlight":
-          "radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.15), rgba(6, 182, 212, 0.05) 50%, transparent 80%)",
-        "cyber-grid":
-          "linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px)",
-      },
-      animation: {
-        "pulse-glow": "pulseGlow 4s ease-in-out infinite",
-        "spin-slow": "spin 20s linear infinite",
-        "float": "float 6s ease-in-out infinite",
-        "shimmer": "shimmer 2.5s infinite linear",
-      },
-      keyframes: {
-        pulseGlow: {
-          "0%, 100%": { opacity: "0.4", transform: "scale(1)" },
-          "50%": { opacity: "0.8", transform: "scale(1.05)" },
-        },
-        float: {
-          "0%, 100%": { transform: "translateY(0px)" },
-          "50%": { transform: "translateY(-10px)" },
-        },
-        shimmer: {
-          "0%": { transform: "translateX(-100%)" },
-          "100%": { transform: "translateX(100%)" },
-        },
+      boxShadow: {
+        card: "0 4px 20px -2px rgba(16, 29, 54, 0.06), 0 2px 6px -1px rgba(16, 29, 54, 0.04)",
+        "card-hover": "0 12px 30px -4px rgba(16, 29, 54, 0.12), 0 4px 10px -2px rgba(16, 29, 54, 0.06)",
+        cyan: "0 0 25px -5px rgba(19, 205, 235, 0.35)",
       },
     },
   },
   plugins: [],
 };
+
 export default config;
