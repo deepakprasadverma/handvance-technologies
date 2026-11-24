@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { 
   ArrowRight, 
   MapPin, 
@@ -22,6 +22,48 @@ import { CareerApplicationModal } from "@/components/forms/CareerApplicationModa
 export default function CareersPage() {
   const [selectedDept, setSelectedDept] = useState<string>("All");
   const [selectedJobForModal, setSelectedJobForModal] = useState<JobOpening | null>(null);
+  const [jobs, setJobs] = useState<JobOpening[]>(CAREERS_DATA);
+
+  useEffect(() => {
+    fetch("/api/careers")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.data) && data.data.length > 0) {
+          const mapped: JobOpening[] = data.data.map((c: {
+            id: string;
+            title: string;
+            department: string;
+            location: string;
+            type: string;
+            experience: string;
+            summary: string;
+            responsibilities: string[];
+            requirements: string[];
+            benefits: string[];
+          }) => ({
+            id: c.id,
+            title: c.title,
+            department:
+              c.department === "AI_CLOUD"
+                ? "AI & Machine Learning"
+                : c.department === "PRODUCT_DESIGN"
+                ? "Product & Design"
+                : c.department === "DEVOPS_CLOUD"
+                ? "DevOps & Cloud"
+                : "Engineering",
+            location: c.location,
+            type: c.type.replace("_", " "),
+            experience: c.experience.replace("_", " "),
+            summary: c.summary,
+            responsibilities: c.responsibilities,
+            requirements: c.requirements,
+            benefits: c.benefits,
+          }));
+          setJobs(mapped);
+        }
+      })
+      .catch((err) => console.error("Careers public fetch error:", err));
+  }, []);
 
   const departments = [
     "All",
@@ -32,8 +74,8 @@ export default function CareersPage() {
   ];
 
   const filteredJobs = selectedDept === "All"
-    ? CAREERS_DATA
-    : CAREERS_DATA.filter((j) => j.department === selectedDept);
+    ? jobs
+    : jobs.filter((j) => j.department === selectedDept);
 
   const perks = [
     {

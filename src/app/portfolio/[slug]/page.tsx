@@ -77,6 +77,28 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   return {
     title: `${project.title} | Case Study | Handvance Technologies`,
     description: project.summary,
+    openGraph: {
+      title: `${project.title} | Case Study | Handvance Technologies`,
+      description: project.summary,
+      url: `https://handvance-technologies.vercel.app/portfolio/${project.slug}`,
+      images: [
+        {
+          url:
+            project.coverImageUrl ||
+            "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80",
+          alt: project.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${project.title} | Case Study | Handvance Technologies`,
+      description: project.summary,
+      images: [
+        project.coverImageUrl ||
+          "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80",
+      ],
+    },
   };
 }
 

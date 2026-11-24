@@ -7,6 +7,7 @@ import {
 import { checkRateLimit, isSpamBot } from "@/lib/rateLimit";
 import { SupabaseStorageService } from "@/services/storageService";
 import prisma from "@/lib/prisma";
+import { sendAdminApplicationNotification, sendApplicantConfirmation } from "@/lib/email";
 
 export async function POST(req: NextRequest) {
   try {
@@ -167,6 +168,23 @@ export async function POST(req: NextRequest) {
         console.error("Database submission error:", dbErr);
       }
     }
+
+    // 8. Send Email Notifications asynchronously via Resend (Phase 8)
+    Promise.allSettled([
+      sendAdminApplicationNotification({
+        applicantName: fullName,
+        email: email,
+        phone: phone,
+        positionTitle: positionAppliedFor,
+        resumeUrl: resumeStorageUrl,
+        coverNotes: coverLetter,
+      }),
+      sendApplicantConfirmation({
+        applicantName: fullName,
+        email: email,
+        positionTitle: positionAppliedFor,
+      }),
+    ]).catch((err) => console.error("[CareerEmail:ASYNC_DISPATCH_FAIL]", err));
 
     return NextResponse.json(
       {

@@ -13,6 +13,9 @@ import { Button } from "@/components/ui/Button";
 import { Card, CardContent } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { TEAM_MEMBERS } from "@/utilities/websiteData";
+import prisma from "@/lib/prisma";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Our Team | Leadership & Engineering Talent",
@@ -44,7 +47,44 @@ const renderSocialIcon = (network: string) => {
   }
 };
 
-export default function TeamPage() {
+export default async function TeamPage() {
+  let displayMembers = TEAM_MEMBERS;
+
+  try {
+    const dbMembers = await prisma.teamMember.findMany({
+      where: { isActive: true },
+      orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
+    });
+
+    if (dbMembers.length > 0) {
+      displayMembers = dbMembers.map((m) => {
+        let dept: "Leadership" | "Engineering" | "AI & Cloud" | "Product & Design" = "Engineering";
+        if (m.department === "LEADERSHIP") dept = "Leadership";
+        else if (m.department === "AI_CLOUD" || m.department === "DEVOPS_CLOUD") dept = "AI & Cloud";
+        else if (m.department === "PRODUCT_DESIGN") dept = "Product & Design";
+
+        return {
+          id: m.id,
+          name: m.name,
+          role: m.role,
+          department: dept,
+          bio: m.bio,
+          avatarUrl:
+            m.avatarUrl ||
+            "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80",
+          skills: m.skills,
+          socialLinks: {
+            linkedin: m.linkedinUrl || undefined,
+            github: m.githubUrl || undefined,
+            twitter: m.twitterUrl || undefined,
+          },
+        };
+      });
+    }
+  } catch (err) {
+    console.error("TeamPage: Failed to load from database, falling back:", err);
+  }
+
   return (
     <div className="space-y-20 pb-20">
       {/* Hero Header */}
@@ -83,7 +123,7 @@ export default function TeamPage() {
           />
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
-            {TEAM_MEMBERS.map((member) => (
+            {displayMembers.map((member) => (
               <Card
                 key={member.id}
                 variant="default"

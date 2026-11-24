@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { contactFormSchema } from "@/lib/validations";
 import { checkRateLimit, isSpamBot } from "@/lib/rateLimit";
 import prisma from "@/lib/prisma";
+import { sendAdminContactNotification, sendCustomerContactConfirmation } from "@/lib/email";
 
 export async function POST(req: NextRequest) {
   try {
@@ -89,6 +90,22 @@ export async function POST(req: NextRequest) {
         // Fall back gracefully if live database is unreachable
       }
     }
+
+    // 6. Send Email Notifications asynchronously via Resend (Phase 8)
+    Promise.allSettled([
+      sendAdminContactNotification({
+        name: data.fullName,
+        email: data.email,
+        phone: data.phone,
+        serviceInterest: data.serviceRequired,
+        subject: data.subject,
+        message: data.message,
+      }),
+      sendCustomerContactConfirmation({
+        name: data.fullName,
+        email: data.email,
+      }),
+    ]).catch((err) => console.error("[ContactEmail:ASYNC_DISPATCH_FAIL]", err));
 
     return NextResponse.json(
       {

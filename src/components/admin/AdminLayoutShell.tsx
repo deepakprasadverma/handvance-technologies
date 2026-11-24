@@ -18,6 +18,10 @@ import {
   Bell,
   Database,
   ChevronRight,
+  Users,
+  Briefcase,
+  MessageSquare,
+  Send,
 } from "lucide-react";
 
 interface AdminUser {
@@ -46,6 +50,10 @@ const navItems = [
   { name: "Contacts", href: "/admin/contacts", icon: Mail },
   { name: "Quote Requests", href: "/admin/quotes", icon: FileText },
   { name: "Projects", href: "/admin/projects", icon: Layers },
+  { name: "Team", href: "/admin/team", icon: Users },
+  { name: "Careers & Jobs", href: "/admin/careers", icon: Briefcase },
+  { name: "Testimonials", href: "/admin/testimonials", icon: MessageSquare },
+  { name: "Subscribers", href: "/admin/subscribers", icon: Send },
   { name: "Settings", href: "/admin/settings", icon: Settings },
 ];
 

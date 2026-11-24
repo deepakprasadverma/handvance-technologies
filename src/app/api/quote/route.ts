@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { quoteRequestSchema } from "@/lib/validations";
 import { checkRateLimit, isSpamBot } from "@/lib/rateLimit";
 import prisma from "@/lib/prisma";
+import { sendAdminQuoteNotification, sendCustomerQuoteConfirmation } from "@/lib/email";
 
 export async function POST(req: NextRequest) {
   try {
@@ -87,6 +88,26 @@ export async function POST(req: NextRequest) {
         console.error("Database submission error:", dbErr);
       }
     }
+
+    // 6. Send Email Notifications asynchronously via Resend (Phase 8)
+    Promise.allSettled([
+      sendAdminQuoteNotification({
+        contactName: data.fullName,
+        email: data.email,
+        phone: data.phone,
+        company: data.companyName,
+        projectType: data.serviceRequired,
+        estimatedBudget: data.estimatedBudget,
+        targetTimeline: data.expectedTimeline,
+        projectDetails: data.projectDescription,
+        additionalRequirements: data.additionalRequirements,
+      }),
+      sendCustomerQuoteConfirmation({
+        contactName: data.fullName,
+        email: data.email,
+        projectType: data.serviceRequired,
+      }),
+    ]).catch((err) => console.error("[QuoteEmail:ASYNC_DISPATCH_FAIL]", err));
 
     return NextResponse.json(
       {

@@ -30,7 +30,30 @@ import {
 
 export default function Home() {
   const featuredServices = SERVICES_DATA.slice(0, 6);
-  const featuredProjects = PORTFOLIO_PROJECTS.filter((p) => p.featured);
+  const [featuredProjects, setFeaturedProjects] = React.useState(
+    PORTFOLIO_PROJECTS.filter((p) => p.featured)
+  );
+  const [displayTestimonials, setDisplayTestimonials] = React.useState(TESTIMONIALS);
+
+  React.useEffect(() => {
+    fetch("/api/testimonials")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.data) && data.data.length > 0) {
+          setDisplayTestimonials(data.data);
+        }
+      })
+      .catch((err) => console.error("Testimonials fetch warning:", err));
+
+    fetch("/api/portfolio")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.projects) && data.projects.length > 0) {
+          setFeaturedProjects(data.projects.filter((p: { featured?: boolean }) => p.featured));
+        }
+      })
+      .catch((err) => console.error("Portfolio fetch warning:", err));
+  }, []);
 
   return (
     <div className="space-y-24 pb-20">
@@ -519,7 +542,7 @@ export default function Home() {
           />
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-            {TESTIMONIALS.map((t) => (
+            {displayTestimonials.map((t) => (
               <Card key={t.id} variant="default" className="flex flex-col justify-between">
                 <CardHeader>
                   <div className="flex items-center gap-1 text-amber-400 mb-3">
