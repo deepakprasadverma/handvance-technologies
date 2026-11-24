@@ -144,3 +144,21 @@ export const newsletterSchema = z.object({
 });
 
 export type NewsletterData = z.infer<typeof newsletterSchema>;
+
+/**
+ * 5. Admin Login Validation Schema
+ * Fields: Email, Password
+ */
+export const adminLoginSchema = z.object({
+  email: z
+    .string()
+    .email({ message: "Please enter a valid administrator email." })
+    .trim()
+    .toLowerCase(),
+  password: z
+    .string()
+    .min(8, { message: "Password must be at least 8 characters." })
+    .max(128, { message: "Password exceeds maximum length." }),
+});
+
+export type AdminLoginData = z.infer<typeof adminLoginSchema>;
